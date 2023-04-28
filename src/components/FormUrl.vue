@@ -43,6 +43,12 @@
         background: #136AE4;
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.14);
         border-radius: 0px 10px 10px 0px;
+        color: white;
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        
     }
 
     h3{
