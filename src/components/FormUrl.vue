@@ -2,7 +2,7 @@
 <template>
     <form @submit.prevent=""> 
         <h3>Añadir nuevo video</h3>
-        <button type="submit" id="btn-submit">Save</button>
+        <button type="submit" id="btn-submit">Añadir</button>
         <input type="text" placeholder="Url" required id="input-url">
     </form>
 </template> 
