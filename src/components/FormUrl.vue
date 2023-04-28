@@ -1,17 +1,42 @@
 
 <template>
-    <form @submit.prevent=""> 
+    <form @submit.prevent="captureInput()"> 
         <h3>Añadir nuevo video</h3>
         <button type="submit" id="btn-submit">Añadir</button>
-        <input type="text" placeholder="Url" required id="input-url">
+        <input type="text" placeholder="Url" required id="input-url" v-model="FormInput" name="FormInput">
     </form>
+    <h1>{{ FormInput }}</h1>
 </template> 
 
-<script lang="ts">
-    import { defineComponent } from "vue";
-    export default defineComponent({
-        name: "MyForm",
-});
+<script lang="ts" setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { YoutubeResponse , Item, Snippet, Thumbnails} from "../interfaces/InterfaceMin";
+
+const users = ref([]);
+const FormInput = ref('');
+
+const captureInput = () =>{
+    const url = FormInput.value;
+    const idVideo = url.split('=')[1].toString();
+    console.log(idVideo);
+    fetchUsers(idVideo)
+}
+console.log(FormInput.value);
+
+const fetchUsers = async (idVideo:string) => {
+  try {
+    const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${idVideo}&key=AIzaSyA-LIOov3NxzdsCoJs_rvH3Z3UXWSQ0oP4&part=snippet`);
+    const data:YoutubeResponse = response.data;
+    const itemResponse:Item = data.items[0];
+    const snippetResponse:Snippet = itemResponse.snippet;
+    const thumbResponse:Thumbnails = snippetResponse.thumbnails;
+    console.log(thumbResponse);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <style lang="css">
