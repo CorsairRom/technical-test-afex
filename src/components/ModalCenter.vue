@@ -4,8 +4,16 @@
                 <div class="modal-btn">
                     <a href="#">X</a>
                 </div>
-            <div class="modal-grid">
+            <div class="modal-div">
+                <div class="modal-grid">
+                    <div class="modal-min">
 
+                    </div>
+                    <div class="modal-title">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, dolorum?</p>
+                        <h5>hola a todos</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -58,12 +66,42 @@
         font-weight: bold;
     }
 
-    .modal-grid{
+    .modal-div{
         position: absolute;
         left: 39px;
         right: 97px;
         top: 60px;
         bottom: 70px;
         border: 2px solid black; 
+    }
+    .modal-grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(1, 1fr);
+        grid-column-gap: 30px;
+        grid-row-gap: 30px;
+        border: 1px solid red;
+    }
+    .modal-min{
+        position: relative;
+        width: 492px;
+        height: 308px;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .modal-title{
+        position: relative;
+        width: 451px;
+        height: 38px;
+        top: 50px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 38px;
+        /* identical to box height, or 157% */
+
+        text-align: center;
+
+        color: #3C3E41;
     }
 </style>

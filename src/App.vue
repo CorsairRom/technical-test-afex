@@ -1,7 +1,7 @@
 <template>
   <Form></Form>
   <Galery></Galery>
-  <Modal></Modal>
+  <!-- <Modal></Modal> -->
 </template>
 
 <script lang="ts" setup>
