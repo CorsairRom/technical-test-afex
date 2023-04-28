@@ -1,11 +1,13 @@
 <template>
-    <Form/>
-    <Galery></Galery>
+  <Form></Form>
+  <Galery></Galery>
+  <Modal></Modal>
 </template>
 
 <script lang="ts" setup>
   import Form from './components/FormUrl.vue';
   import Galery from './components/GaleryUrl.vue';
+  import Modal from './components/ModalCenter.vue';
 </script>
 
 <style>
