@@ -18,16 +18,26 @@ import { db } from "@/utils/ConfigDataBase";
 let FormInput = ref('');
 
 const captureInput = () => {
+    
     const url = FormInput.value;
-    const idVideo = url.split('=')[1].toString();
-    console.log(idVideo);
-    getData(idVideo).then((data) => {
-        let snippet = data as Snippet
-        let title = (snippet.thumbnails as Thumbnails).medium.url
-        
-        AddData(idVideo, snippet.description, title, snippet.title , url);
+    try {
+        const idVideo = url.split('=')[1].toString();
+        console.log(idVideo);
+        getData(idVideo).then((data) => {
+            let snippet = data as Snippet
+            let title = (snippet.thumbnails as Thumbnails).medium.url
+            
+            AddData(idVideo, snippet.description, title, snippet.title , url);
+            FormInput.value = ''
+        })     
+    }catch (e){
+        console.log(FormInput.value);
+        console.log(e);
         FormInput.value = ''
-    })
+    }
+
+    
+
     
 }
 const AddData = async (id: string, desc:string, thumUrl:string, title:string, url:string) => {
