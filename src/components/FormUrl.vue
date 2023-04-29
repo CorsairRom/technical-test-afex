@@ -5,6 +5,9 @@
         <button type="submit" id="btn-submit">Añadir</button>
         <input type="text" placeholder="Url" required id="input-url" v-model="FormInput" name="FormInput">
     </form>
+    <div v-if="cond">
+        <p>{{ msg }}</p>
+    </div>
 </template> 
 
 <script lang="ts" setup>
@@ -15,22 +18,40 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/ConfigDataBase";
 
 let FormInput = ref('');
-
+const msg = ref('');
+let cond = ref(false);
+let idVideo = ''
 const captureInput = () => {
     // capturar input de la url ingresada
     const url = FormInput.value;
     try {
         // Extraer id del video
-        const idVideo = url.split('=')[1].toString();
-        // Extraer data video, del servicio youtube.services
-        getData(idVideo).then((data) => {
-            let snippet = data as Snippet
-            let title = (snippet.thumbnails as Thumbnails).medium.url
+        if (url.includes('youtu.be') || url.includes('youtube.com')) {
+            if (url.includes('=')) {
+                idVideo = url.split('=')[1].toString();   
+            }
+            if (url.includes('.be')) {
+                idVideo = url.split('.be')[1].split('/')[1].toString(); 
+                console.log(idVideo);
+            }
+            //Extraer data video, del servicio youtube.services
+            getData(idVideo).then((data) => {
+                let snippet = data as Snippet
+                let title = (snippet.thumbnails as Thumbnails).medium.url
+                
+                AddData(idVideo, snippet.description, title, snippet.title , url);
+                // Limpiar input
+                FormInput.value = ''
+            })     
             
-            AddData(idVideo, snippet.description, title, snippet.title , url);
-            // Limpiar input
-            FormInput.value = ''
-        })     
+        }else{
+            msg.value = "Video no tiene formato correcto"
+            if (msg.value.includes(' ')) {
+                cond.value = true
+            }
+            console.log(msg.value);
+            console.log(cond);
+        }
     }catch (e){
         console.log(FormInput.value);
         console.log(e);
