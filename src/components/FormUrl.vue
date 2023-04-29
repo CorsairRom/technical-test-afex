@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import {  Snippet, Thumbnails } from "../interfaces/InterfaceMin";
+import { Snippet, Thumbnails } from "../interfaces/InterfaceMin";
 import { getData } from "../services/youtube.services";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/ConfigDataBase";
@@ -21,6 +21,7 @@ let FormInput = ref('');
 const msg = ref('');
 let cond = ref(false);
 let idVideo = ''
+const idHistory: any = []
 const captureInput = () => {
     // capturar input de la url ingresada
     const url = FormInput.value;
@@ -28,39 +29,49 @@ const captureInput = () => {
         // Extraer id del video
         if (url.includes('youtu.be') || url.includes('youtube.com')) {
             if (url.includes('=')) {
-                idVideo = url.split('=')[1].toString();   
+                idVideo = url.split('=')[1].toString();
             }
             if (url.includes('.be')) {
-                idVideo = url.split('.be')[1].split('/')[1].toString(); 
+                idVideo = url.split('.be')[1].split('/')[1].toString();
                 console.log(idVideo);
             }
+            if (!idHistory.includes(idVideo)) {
+                getData(idVideo).then((data) => {
+                    let snippet = data as Snippet
+                    let title = (snippet.thumbnails as Thumbnails).medium.url
+
+                    AddData(idVideo, snippet.description, title, snippet.title, url);
+                    // Limpiar input
+                    FormInput.value = ''
+                })
+            } else {
+                msg.value = "Video ya existe en tu lista"
+                if (msg.value.includes(' ')) {
+                    cond.value = true
+                    FormInput.value = ''
+                }
+            }
             //Extraer data video, del servicio youtube.services
-            getData(idVideo).then((data) => {
-                let snippet = data as Snippet
-                let title = (snippet.thumbnails as Thumbnails).medium.url
-                
-                AddData(idVideo, snippet.description, title, snippet.title , url);
-                // Limpiar input
-                FormInput.value = ''
-            })     
-            
-        }else{
+
+        } else {
             msg.value = "Video no tiene formato correcto"
             if (msg.value.includes(' ')) {
                 cond.value = true
+                FormInput.value = ''
             }
             console.log(msg.value);
             console.log(cond);
         }
-    }catch (e){
+    } catch (e) {
         console.log(FormInput.value);
         console.log(e);
         // Limpiar input
         FormInput.value = ''
-    }  
+    }
 }
 // Guardar la data en firestore
-const AddData = async (id: string, desc:string, thumUrl:string, title:string, url:string) => {
+const AddData = async (id: string, desc: string, thumUrl: string, title: string, url: string) => {
+    idHistory.push(id)
     await setDoc(doc(db, "TestAfexVue", id), {
         desc,
         thumUrl,
