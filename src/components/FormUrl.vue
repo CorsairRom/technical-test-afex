@@ -9,8 +9,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import axios from 'axios';
-import { YoutubeResponse, Item, Snippet, Thumbnails } from "../interfaces/InterfaceMin";
+import {  Snippet, Thumbnails } from "../interfaces/InterfaceMin";
 import { getData } from "../services/youtube.services";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/ConfigDataBase";
@@ -18,28 +17,28 @@ import { db } from "@/utils/ConfigDataBase";
 let FormInput = ref('');
 
 const captureInput = () => {
-    
+    // capturar input de la url ingresada
     const url = FormInput.value;
     try {
+        // Extraer id del video
         const idVideo = url.split('=')[1].toString();
-        console.log(idVideo);
+        // Extraer data video, del servicio youtube.services
         getData(idVideo).then((data) => {
             let snippet = data as Snippet
             let title = (snippet.thumbnails as Thumbnails).medium.url
             
             AddData(idVideo, snippet.description, title, snippet.title , url);
+            // Limpiar input
             FormInput.value = ''
         })     
     }catch (e){
         console.log(FormInput.value);
         console.log(e);
+        // Limpiar input
         FormInput.value = ''
-    }
-
-    
-
-    
+    }  
 }
+// Guardar la data en firestore
 const AddData = async (id: string, desc:string, thumUrl:string, title:string, url:string) => {
     await setDoc(doc(db, "TestAfexVue", id), {
         desc,

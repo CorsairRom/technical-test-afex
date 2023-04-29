@@ -26,8 +26,7 @@
     
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-import { toRefs, defineProps } from 'vue';
+import {  defineProps } from 'vue';
 
 
 
@@ -39,16 +38,16 @@ interface todoInterface {
     thumb?: string,
 }
 
+//extraer variables reactivas
 const props = defineProps<{
     videosProp:todoInterface,
     showModal:boolean
 }>();
 
-
-
-
-
 </script>
+
+
+
 <style lang="css">
 .body-modal::before {
     content: "";

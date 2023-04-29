@@ -13,16 +13,17 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-import { toRefs, defineProps } from 'vue';
+import {  defineProps } from 'vue';
 import { db } from "@/utils/ConfigDataBase";
 import { doc, deleteDoc } from "firebase/firestore";
 
+// Extraer variables reactivas
 const props = defineProps<{
     ShowModalDelete: boolean,
     deleteID:string
 }>();
 
+//Eliminar video seleccionado
 const DeleteLink = async (id:any) => {
     try {
         await deleteDoc(doc(db, "TestAfexVue", id));
@@ -32,6 +33,8 @@ const DeleteLink = async (id:any) => {
     
 };
 </script>
+
+
 <style scoped lang="css">
 .modal-card {
     position: absolute;

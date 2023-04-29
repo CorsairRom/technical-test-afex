@@ -9,7 +9,6 @@
                 <div class="img" @click="varProp(todo.id.toString()); showModal = true" >
                     <img :src="todo.thumb" alt="Thumbnail" class="img-cover">
                 </div>
-                <!-- <div class="div-btn" @click="DeleteLink(todo.id)"> -->
                 <div class="div-btn" @click="ShowModalDelete = true; delID(todo.id)" >
                     <button class="btn-close">
                         <span class="span">X</span>
@@ -27,13 +26,15 @@ import { collection, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { FirebaseResponse } from "@/interfaces/InterfaceFireBase";
 import Mymodal from "@/components/ModalCenter.vue"
 import ModalDelete from "@/components/ModalDelete.vue"
-import { toRefs, defineProps } from 'vue';
+
 
 
 const todos = ref<todoInterface[]>([]);
 const showModal = ref(false)
 const ShowModalDelete = ref(false)
 const deleteID = ref('')
+
+
 interface todoInterface {
     id: string,
     title: string,
@@ -43,13 +44,13 @@ interface todoInterface {
 }
 
 let videosProp:any = ref([]);
-
+//configurar variable que se enviara los demas componentes
 const varProp = (id:string)=>{
     const val= todos.value.find(todo => todo.id === id) as todoInterface;
     videosProp.value = val;
     
 };
-
+//traer instantanea de los datos en firestore
 const getAllData = async ()  => {
     onSnapshot(collection(db, "TestAfexVue"), (querySnapshot) => {
     const data:any= [];
@@ -69,9 +70,7 @@ const getAllData = async ()  => {
 };
 getAllData();
 
-const DeleteLink = async (id:any) => {
-    await deleteDoc(doc(db, "TestAfexVue", id));
-};
+//cambiar estado del id para enviar al modal de eliminacion
 const delID = (id:any) =>{
     deleteID.value = id
 }
