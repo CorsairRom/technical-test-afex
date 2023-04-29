@@ -1,15 +1,16 @@
 <template>
     <transition name="fade" >
-        <Mymodal  v-show="showModal" :videosProp="videosProp"  
+        <Mymodal  :showModal="showModal" :videosProp="videosProp" v-if="showModal" @close="showModal = false"
             />
     </transition>
     <div class="container"> 
         <div class="container-card"  >
             <div class="card" v-for="todo in todos" :key="todo.id">
-                <div class="img" @click="showModal=true; varProp(todo.id.toString())" >
-                    <img :src="todo.thumb" alt="Thumbnail" class="img-cover"  >
+                <div class="img" @click="varProp(todo.id.toString()); showModal = true" >
+                    <img :src="todo.thumb" alt="Thumbnail" class="img-cover">
                 </div>
-                <div class="div-btn" @click="DeleteLink(todo.id)">
+                <!-- <div class="div-btn" @click="DeleteLink(todo.id)"> -->
+                <div class="div-btn" @click="ShowModalDelete = true; delID(todo.id)" >
                     <button class="btn-close">
                         <span class="span">X</span>
                     </button>
@@ -17,7 +18,7 @@
             </div>
         </div>
     </div>
-    
+    <ModalDelete v-if="ShowModalDelete" @close="ShowModalDelete = false" :ShowModalDelete="ShowModalDelete" :deleteID="deleteID"/>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -25,11 +26,14 @@ import { db } from "@/utils/ConfigDataBase";
 import { collection, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { FirebaseResponse } from "@/interfaces/InterfaceFireBase";
 import Mymodal from "@/components/ModalCenter.vue"
+import ModalDelete from "@/components/ModalDelete.vue"
+import { toRefs, defineProps } from 'vue';
 
 
-const showModal = ref(false);
 const todos = ref<todoInterface[]>([]);
-
+const showModal = ref(false)
+const ShowModalDelete = ref(false)
+const deleteID = ref('')
 interface todoInterface {
     id: string,
     title: string,
@@ -40,14 +44,11 @@ interface todoInterface {
 
 let videosProp:any = ref([]);
 
-
-
-
 const varProp = (id:string)=>{
     const val= todos.value.find(todo => todo.id === id) as todoInterface;
-    videosProp.value = val
+    videosProp.value = val;
+    
 };
-
 
 const getAllData = async ()  => {
     onSnapshot(collection(db, "TestAfexVue"), (querySnapshot) => {
@@ -71,8 +72,9 @@ getAllData();
 const DeleteLink = async (id:any) => {
     await deleteDoc(doc(db, "TestAfexVue", id));
 };
-
-
+const delID = (id:any) =>{
+    deleteID.value = id
+}
 
 </script>
 <style lang="css">
@@ -82,7 +84,6 @@ const DeleteLink = async (id:any) => {
     left: 434px;
     right: 365px;
     bottom: 365px;
-    /* border: 1px solid red; */
     display: grid;
 
 }
@@ -96,8 +97,6 @@ const DeleteLink = async (id:any) => {
 }
 
 
-
-
 /* card */
 .card {
     position: relative;
@@ -105,13 +104,11 @@ const DeleteLink = async (id:any) => {
     height: 150px;
     background: #F2F2F2;
     box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.07);
-    /* border: 1px solid red; */
     float: left;
 }
 
 .div-btn {
     position: relative;
-
 }
 
 .btn-close {
@@ -146,9 +143,9 @@ const DeleteLink = async (id:any) => {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+  transition: opacity .8s
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0
 }
 </style>
