@@ -1,9 +1,9 @@
 
 <template>
-    <div class="body-modal">
+    <div class="body-modal" v-show="showModal">
         <div class="modal-container">
-            <div class="modal-btn" >
-                <a href="#">x</a>
+            <div class="modal-btn" @click="closeModal()">
+                <a href="">x</a>
             </div>
             <div class="modal-div">
                 <div class="modal-grid">
@@ -28,7 +28,7 @@
 import { ref } from "vue";
 import { toRefs, defineProps } from 'vue';
 
-
+let showModal = true;
 interface todoInterface {
     id?: string,
     title?: string,
@@ -41,7 +41,9 @@ const props = defineProps<{
     videosProp:todoInterface
 }>();
 
-
+const closeModal = () =>{
+    showModal = false;
+}
 
 
 
