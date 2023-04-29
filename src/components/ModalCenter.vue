@@ -9,6 +9,7 @@
                 <div class="modal-grid">
                     <div class="modal-min" >
                         <img :src=props.videosProp.thumb class="img-expand">
+                        <a class="btn-url-you" :href=props.videosProp.url >▶️</a>
                     </div>
                     <div class="modal-title">
                         <div class="div-title">
@@ -158,7 +159,15 @@ a {
     line-height: 20px;
     text-align: justify;
 }
+.btn-url-you{
+    position: absolute;
+    width: 54px;
+    height: 57px;
+    left: 201px;
+    top: 124px;
 
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
 
 
 
